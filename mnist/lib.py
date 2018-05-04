@@ -3,12 +3,14 @@ import numpy as np
 from PIL import Image
 from sklearn import datasets, svm
 from sklearn.model_selection import train_test_split
+import dill
 
+a = np.array([])
 
 def read():
-    """予測モデルを読み込む"""
-    with open('mnist.pickle', 'rb') as file:
+    with open('mnist.pickle','rb') as file:
         clf = pickle.load(file)
+
     return clf
 
 
@@ -56,4 +58,3 @@ if __name__ == '__main__':
         img_array = img.reshape(1, 784)
         result = predict(img_array)
         print(result)
-
