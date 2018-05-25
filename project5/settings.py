@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'surprise.apps.SurpriseConfig',
     'mnist.apps.MnistConfig',
     'django.contrib.admin',
     'django.contrib.auth',

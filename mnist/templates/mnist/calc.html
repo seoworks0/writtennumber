@@ -1,0 +1,120 @@
+{% extends 'mnist/base.html' %}
+
+{% block content %}
+<form action="" method="POST" enctype='multipart/form-data'>
+<canvas id="canvas" width="140" height="140"></canvas>
+<hr>
+<input type="hidden" name="img-src" value="" id="img-src">
+<canvas id="canvas2" width="140" height="140"></canvas>
+<hr>
+<input type="hidden" name="img-src2" value="" id="img-src2">
+<input type="text" name="formula" value="" id="formula">
+<input type="button" class="btn btn-outline-primary btn-lg" id="send" value="計算する">
+{% csrf_token %}
+</form>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+// キャンバスを操作するためのオブジェクトを取得
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+// キャンバスを黒く塗りつぶす
+ctx.fillStyle = '#000';
+ctx.fillRect(0, 0, 140, 140);
+
+ctx.lineCap = 'square';  // 四角い形の線
+ctx.strokeStyle = '#fff';  // 白い線
+ctx.lineWidth = 13;  // 線の幅
+var draw = false;  // クリック中かのフラグ
+
+// マウスが動いたときに呼び出される
+canvas.addEventListener("mousemove",function(e) {
+  var rect = e.target.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+
+  if(draw) {
+    ctx.beginPath();
+    ctx.moveTo(mouseX1,mouseY1);
+    ctx.lineTo(mouseX,mouseY);
+    ctx.stroke();
+    mouseX1 = mouseX;
+    mouseY1 = mouseY;
+  }
+});
+
+// クリックで呼び出される
+canvas.addEventListener("mousedown",function(e) {
+  draw = true;
+  mouseX1 = mouseX;
+  mouseY1 = mouseY;
+});
+
+// クリックを離されると呼び出される
+canvas.addEventListener("mouseup", function(e){
+  draw = false;
+});
+
+
+// 送信ボタンで呼び出される
+$('#send').on('click',function(e){
+    var form = $(this).parents('form');
+    var src = canvas.toDataURL('image/png');
+    $('#img-src').val(src);
+    form.submit();
+});
+</script>
+<script>
+// キャンバスを操作するためのオブジェクトを取得
+var canvas2 = document.getElementById("canvas2");
+var ctx2 = canvas2.getContext("2d");
+
+// キャンバスを黒く塗りつぶす
+ctx2.fillStyle = '#000';
+ctx2.fillRect(0, 0, 140, 140);
+
+ctx2.lineCap = 'square';  // 四角い形の線
+ctx2.strokeStyle = '#fff';  // 白い線
+ctx2.lineWidth = 13;  // 線の幅
+var draw = false;  // クリック中かのフラグ
+
+// マウスが動いたときに呼び出される
+canvas2.addEventListener("mousemove",function(e) {
+  var rect = e.target.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+
+  if(draw) {
+    ctx2.beginPath();
+    ctx2.moveTo(mouseX1,mouseY1);
+    ctx2.lineTo(mouseX,mouseY);
+    ctx2.stroke();
+    mouseX1 = mouseX;
+    mouseY1 = mouseY;
+  }
+});
+
+// クリックで呼び出される
+canvas2.addEventListener("mousedown",function(e) {
+  draw = true;
+  mouseX1 = mouseX;
+  mouseY1 = mouseY;
+});
+
+// クリックを離されると呼び出される
+canvas2.addEventListener("mouseup", function(e){
+  draw = false;
+});
+
+
+// 送信ボタンで呼び出される
+$('#send').on('click',function(e){
+    var form = $(this).parents('form');
+    var src = canvas2.toDataURL('image/png');
+    $('#img-src2').val(src);
+    form.submit();
+});
+</script>
+{% endblock %}

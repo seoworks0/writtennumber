@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <title>Test</title>
+<script>
+$(document).ready(function(){
+    $(".file").change(function() {
+        var inputFiles = this.files;
+        if(inputFiles == undefined || inputFiles.length == 0) return;
+
+        var reg=new RegExp("\\d+$","g");
+        var num=reg.exec(this.id);
+
+        var reader = new FileReader();
+        reader.addEventListener('load', function(){
+            var img=$(new Image());
+            img.load(function(){
+                var canvas = document.getElementById("canvas"+num);
+                var c = canvas.getContext("2d");
+                c.drawImage(this, 0, 0, canvas.width, canvas.height);
+            });
+            img.attr("src",reader.result);
+        })
+        reader.readAsDataURL(inputFiles[0]);
+    });
+});
+</script>
+  </head>
+  <body>
+    <form action="" method="POST" enctype='multipart/form-data'>
+    <canvas id="canvas" width="140" height="140"></canvas>
+    <hr>
+    <input type="hidden" name="img-src" value="" id="img-src">
+    <canvas id="canvas2" width="140" height="140"></canvas>
+    <hr>
+    <input type="hidden" name="img-src2" value="" id="img-src2">
+    <input type="button" class="btn btn-outline-primary btn-lg" id="send" value="送信する">
+    {% csrf_token %}
+    </form>
+  </body>
+</html>

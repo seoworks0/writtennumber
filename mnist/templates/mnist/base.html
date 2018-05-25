@@ -14,10 +14,16 @@
       <!-- ナビバー -->
       <ul class="nav">
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'mnist:home' %}">HOME</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'mnist:upload' %}">アップロード</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'mnist:paint' %}">お絵かき</a>
+          <a class="nav-link" href="{% url 'mnist:paint' %}">数字認識</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'mnist:calc' %}">数字計算</a>
         </li>
       </ul>
 

@@ -1,0 +1,79 @@
+<form id="getform" action="{% url 'api_v1_posts' %}" method="GET">
+  <input type="text" id="query">
+  <button type="submit" >検索</button>
+</form>
+<hr>
+<form id="postform" action="{% url 'api_v1_posts' %}" method="POST">
+  <input type="text" id="title">
+  <button type="submit" >検索</button>
+</form>
+<hr>
+<div id="result">
+  {% for post in post_list%}
+    <p>{{ post.title }}</p>
+  {% endfor %}
+</div>
+<script>
+    $('#getform').submit(function() {
+        $('#result').html('');
+        $.ajax({
+            'url':'{% url "api_v1_posts" %}',
+            'type':'GET',
+            'data':{
+                'query':$('#query').val(),
+            },
+            'dataType':'json',
+            'success':function(response){
+                $.each(response.result_list, function(index, title) {
+                    $('#result').append('<p>'+ title +'</p>')
+                });
+            },
+        });
+        return false;
+    });
+    $('#postform').submit(function() {
+        $.ajax({
+            'url':'{% url "api_v1_posts" %}',
+            'type':'POST',
+            'data':{
+                'title':$('#title').val(),
+            },
+            'dataType':'json',
+            'success':function(r){
+                message = 'pk→' + r.pk +  '\ntitle→' + r.title + '\n日付→'+ r.created_at;
+                alert(message);
+            },
+        });
+        return false;
+    });
+    </script>
+<script>
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+
+      function csrfSafeMethod(method) {
+          // these HTTP methods do not require CSRF protection
+          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+      }
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+              if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              }
+          }
+      });
+</script>

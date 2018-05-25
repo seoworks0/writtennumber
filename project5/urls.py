@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mnist.urls')),
+    path('surprise/', include('surprise.urls')),
 ]
